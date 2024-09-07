@@ -5,7 +5,12 @@ export default {
 	content: ["./src/**/*.{html,js,svelte,ts}"],
 
 	theme: {
-		colors: {},
+		colors: {
+			transparent: "transparent",
+		},
+		fontFamily: {
+			sans: ["SUSE", "sans-serif"],
+		},
 	},
 
 	plugins: [
