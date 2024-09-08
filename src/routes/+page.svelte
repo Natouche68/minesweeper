@@ -6,6 +6,7 @@
 	);
 	let bombs = 0;
 	let gameStarted = false;
+	let currentTool: "flag" | "dig" = "flag";
 
 	function generateGrid(touchX: number, touchY: number) {
 		grid = [];
@@ -85,6 +86,16 @@
 			gameStarted = true;
 
 			revealCell(x, y);
+		} else {
+			if (currentTool === "flag") {
+				if (grid[x][y].state === "hidden") {
+					grid[x][y].state = "flagged";
+				} else if (grid[x][y].state === "flagged") {
+					grid[x][y].state = "hidden";
+				}
+			} else {
+				revealCell(x, y);
+			}
 		}
 	}
 
@@ -136,7 +147,11 @@
 	}
 </script>
 
-<div class="h-dvh flex justify-center items-center bg-base text-text">
+<div class="h-dvh flex flex-col justify-between items-center bg-base text-text">
+	<div class="w-full p-4 font-bold text-2xl text-center bg-mantle">
+		{bombs}
+	</div>
+
 	<div class="flex flex-row">
 		{#each grid as col, i}
 			<div class="flex flex-col">
@@ -166,10 +181,31 @@
 					>
 						{#if cell.state === "visible"}
 							{cell.content === "bomb" ? "💣" : cell.content}
+						{:else if cell.state === "flagged"}
+							🚩
 						{/if}
 					</button>
 				{/each}
 			</div>
 		{/each}
+	</div>
+
+	<div class="p-4 flex flex-row gap-4">
+		<button
+			class="p-4 text-4xl {currentTool === 'flag'
+				? 'bg-crust'
+				: 'bg-mantle'} rounded-2xl"
+			on:click={() => (currentTool = "flag")}
+		>
+			🚩
+		</button>
+		<button
+			class="p-4 text-4xl {currentTool === 'dig'
+				? 'bg-crust'
+				: 'bg-mantle'} rounded-2xl"
+			on:click={() => (currentTool = "dig")}
+		>
+			⛏️
+		</button>
 	</div>
 </div>
