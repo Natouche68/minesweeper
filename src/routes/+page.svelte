@@ -4,13 +4,12 @@
 	let grid: Cell[][] = Array(10).fill(
 		Array(20).fill({ content: 0, state: "hidden" })
 	);
-	let bombs = 0;
 	let gameStarted = false;
 	let currentTool: "flag" | "dig" = "flag";
+	let time = 0;
 
 	function generateGrid(touchX: number, touchY: number) {
 		grid = [];
-		bombs = 0;
 
 		for (let i = 0; i < 10; i++) {
 			grid.push([]);
@@ -19,6 +18,7 @@
 			}
 		}
 
+		let bombs = 0;
 		while (bombs < 35) {
 			const x = Math.floor(Math.random() * 10);
 			const y = Math.floor(Math.random() * 20);
@@ -86,6 +86,8 @@
 			gameStarted = true;
 
 			revealCell(x, y);
+
+			setInterval(() => time++, 1000);
 		} else {
 			if (currentTool === "flag") {
 				if (grid[x][y].state === "hidden") {
@@ -94,13 +96,17 @@
 					grid[x][y].state = "hidden";
 				}
 			} else {
-				revealCell(x, y);
+				if (grid[x][y].state === "hidden") {
+					revealCell(x, y);
+				} else if (grid[x][y].state === "visible") {
+					revealNearbyCells(x, y);
+				}
 			}
 		}
 	}
 
 	function revealCell(x: number, y: number) {
-		if (grid[x][y].state === "visible") return;
+		if (grid[x][y].state !== "hidden") return;
 
 		grid[x][y].state = "visible";
 
@@ -117,6 +123,31 @@
 		}
 
 		grid = grid;
+	}
+
+	function revealNearbyCells(x: number, y: number) {
+		if (x > 0 && y > 0 && grid[x - 1][y - 1].state === "hidden")
+			revealCell(x - 1, y - 1);
+		if (x > 0 && grid[x - 1][y].state === "hidden") revealCell(x - 1, y);
+		if (
+			x > 0 &&
+			y < grid[0].length - 1 &&
+			grid[x - 1][y + 1].state === "hidden"
+		)
+			revealCell(x - 1, y + 1);
+		if (y > 0 && grid[x][y - 1].state === "hidden") revealCell(x, y - 1);
+		if (y < grid[0].length - 1 && grid[x][y + 1].state === "hidden")
+			revealCell(x, y + 1);
+		if (x < grid.length - 1 && y > 0 && grid[x + 1][y - 1].state === "hidden")
+			revealCell(x + 1, y - 1);
+		if (x < grid.length - 1 && grid[x + 1][y].state === "hidden")
+			revealCell(x + 1, y);
+		if (
+			x < grid.length - 1 &&
+			y < grid[0].length - 1 &&
+			grid[x + 1][y + 1].state === "hidden"
+		)
+			revealCell(x + 1, y + 1);
 	}
 
 	function getCellColor(cell: Cell): string {
@@ -149,7 +180,7 @@
 
 <div class="h-dvh flex flex-col justify-between items-center bg-base text-text">
 	<div class="w-full p-4 font-bold text-2xl text-center bg-mantle">
-		{bombs}
+		{time}
 	</div>
 
 	<div class="flex flex-row">
