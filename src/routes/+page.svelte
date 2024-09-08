@@ -1,29 +1,32 @@
 <script lang="ts">
 	import type { Cell } from "$lib/utils";
-	import { onMount } from "svelte";
 
-	const grid: Cell[][] = [];
+	let grid: Cell[][] = Array(10).fill(
+		Array(20).fill({ content: 0, state: "hidden" })
+	);
 	let bombs = 0;
+	let gameStarted = false;
 
-	onMount(() => {
+	function generateGrid(touchX: number, touchY: number) {
+		grid = [];
+		bombs = 0;
+
 		for (let i = 0; i < 10; i++) {
 			grid.push([]);
 			for (let j = 0; j < 20; j++) {
-				grid[i].push({ content: 0, state: "visible" });
+				grid[i].push({ content: 0, state: "hidden" });
 			}
 		}
 
-		for (let i = 0; i < 35; i++) {
+		while (bombs < 35) {
 			const x = Math.floor(Math.random() * 10);
 			const y = Math.floor(Math.random() * 20);
 
-			if (grid[x][y].content !== "bomb") {
+			if (grid[x][y].content !== "bomb" && !cellNearby(x, y, touchX, touchY)) {
 				grid[x][y].content = "bomb";
 				bombs++;
 			}
 		}
-
-		console.log(bombs);
 
 		grid.forEach((col, i) => {
 			col.forEach((cell, j) => {
@@ -61,7 +64,49 @@
 				}
 			});
 		});
-	});
+	}
+
+	function cellNearby(x1: number, y1: number, x2: number, y2: number): boolean {
+		if (x1 - 1 === x2 && y1 - 1 === y2) return true;
+		if (x1 - 1 === x2 && y1 === y2) return true;
+		if (x1 - 1 === x2 && y1 + 1 === y2) return true;
+		if (x1 === x2 && y1 - 1 === y2) return true;
+		if (x1 === x2 && y1 === y2) return true;
+		if (x1 === x2 && y1 + 1 === y2) return true;
+		if (x1 + 1 === x2 && y1 - 1 === y2) return true;
+		if (x1 + 1 === x2 && y1 === y2) return true;
+		if (x1 + 1 === x2 && y1 + 1 === y2) return true;
+		return false;
+	}
+
+	function handleClick(x: number, y: number) {
+		if (!gameStarted) {
+			generateGrid(x, y);
+			gameStarted = true;
+
+			revealCell(x, y);
+		}
+	}
+
+	function revealCell(x: number, y: number) {
+		if (grid[x][y].state === "visible") return;
+
+		grid[x][y].state = "visible";
+
+		if (grid[x][y].content === 0) {
+			if (x > 0 && y > 0) revealCell(x - 1, y - 1);
+			if (x > 0) revealCell(x - 1, y);
+			if (x > 0 && y < grid[0].length - 1) revealCell(x - 1, y + 1);
+			if (y > 0) revealCell(x, y - 1);
+			if (y < grid[0].length - 1) revealCell(x, y + 1);
+			if (x < grid.length - 1 && y > 0) revealCell(x + 1, y - 1);
+			if (x < grid.length - 1) revealCell(x + 1, y);
+			if (x < grid.length - 1 && y < grid[0].length - 1)
+				revealCell(x + 1, y + 1);
+		}
+
+		grid = grid;
+	}
 
 	function getCellColor(cell: Cell): string {
 		switch (cell.content) {
@@ -104,15 +149,25 @@
 							: (i + j) % 2 === 0
 								? "bg-surface0"
 								: "bg-surface1"}
-					{@const textColor = getCellColor(cell)}
 
-					<div
-						class="w-8 h-8 flex justify-center items-center text-xl font-bold {bgColor} {textColor}"
+					<button
+						class="w-8
+              h-8
+              flex
+              justify-center
+              items-center
+              text-xl
+              font-bold
+              {bgColor}
+              {getCellColor(cell)}
+              border-none
+              outline-none"
+						on:click={() => handleClick(i, j)}
 					>
 						{#if cell.state === "visible"}
 							{cell.content === "bomb" ? "💣" : cell.content}
 						{/if}
-					</div>
+					</button>
 				{/each}
 			</div>
 		{/each}
