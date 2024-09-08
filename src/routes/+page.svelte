@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { scale, fly, blur } from "svelte/transition";
 	import type { Cell } from "$lib/utils";
 
 	let grid: Cell[][] = Array(10).fill(
@@ -7,9 +8,11 @@
 	let gameStarted = false;
 	let currentTool: "flag" | "dig" = "flag";
 	let time = 0;
+	let bombs = 0;
 
 	function generateGrid(touchX: number, touchY: number) {
 		grid = [];
+		bombs = 0;
 
 		for (let i = 0; i < 10; i++) {
 			grid.push([]);
@@ -18,7 +21,6 @@
 			}
 		}
 
-		let bombs = 0;
 		while (bombs < 35) {
 			const x = Math.floor(Math.random() * 10);
 			const y = Math.floor(Math.random() * 20);
@@ -92,8 +94,10 @@
 			if (currentTool === "flag") {
 				if (grid[x][y].state === "hidden") {
 					grid[x][y].state = "flagged";
+					bombs--;
 				} else if (grid[x][y].state === "flagged") {
 					grid[x][y].state = "hidden";
+					bombs++;
 				}
 			} else {
 				if (grid[x][y].state === "hidden") {
@@ -179,8 +183,15 @@
 </script>
 
 <div class="h-dvh flex flex-col justify-between items-center bg-base text-text">
-	<div class="w-full p-4 font-bold text-2xl text-center bg-mantle">
-		{time}
+	<div
+		class="w-full p-4 flex flex-row justify-center items-center gap-4 font-bold text-2xl bg-mantle"
+	>
+		<div>
+			⏳{time}
+		</div>
+		<div>
+			🚩{bombs}
+		</div>
 	</div>
 
 	<div class="flex flex-row">
@@ -197,23 +208,37 @@
 								: "bg-surface1"}
 
 					<button
-						class="w-8
+						class="relative
+							w-8
               h-8
               flex
               justify-center
               items-center
               text-xl
               font-bold
-              {bgColor}
+              {(i + j) % 2 === 0 ? 'bg-mantle' : 'bg-crust'}
               {getCellColor(cell)}
               border-none
               outline-none"
 						on:click={() => handleClick(i, j)}
 					>
-						{#if cell.state === "visible"}
-							{cell.content === "bomb" ? "💣" : cell.content}
-						{:else if cell.state === "flagged"}
-							🚩
+						{cell.content === "bomb" ? "💣" : cell.content}
+
+						{#if cell.state !== "visible"}
+							<div
+								class="absolute
+								z-20
+								top-0
+								left-0
+								w-full
+								h-full
+								{(i + j) % 2 === 0 ? 'bg-surface0' : 'bg-surface1'}"
+								out:blur={{ amount: "6rem" }}
+							>
+								{#if cell.state === "flagged"}
+									<div in:scale out:fly={{ y: 20 }}>🚩</div>
+								{/if}
+							</div>
 						{/if}
 					</button>
 				{/each}
