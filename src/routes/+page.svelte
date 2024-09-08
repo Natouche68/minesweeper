@@ -6,6 +6,7 @@
 		Array(20).fill({ content: 0, state: "hidden" })
 	);
 	let gameStarted = false;
+	let isGameOver = false;
 	let currentTool: "flag" | "dig" = "flag";
 	let time = 0;
 	let bombs = 0;
@@ -90,7 +91,7 @@
 			revealCell(x, y);
 
 			setInterval(() => time++, 1000);
-		} else {
+		} else if (!isGameOver) {
 			if (currentTool === "flag") {
 				if (grid[x][y].state === "hidden") {
 					grid[x][y].state = "flagged";
@@ -114,6 +115,10 @@
 
 		grid[x][y].state = "visible";
 
+		if (grid[x][y].content === "bomb") {
+			gameOver();
+		}
+
 		if (grid[x][y].content === 0) {
 			if (x > 0 && y > 0) revealCell(x - 1, y - 1);
 			if (x > 0) revealCell(x - 1, y);
@@ -127,6 +132,8 @@
 		}
 
 		grid = grid;
+
+		checkWin();
 	}
 
 	function revealNearbyCells(x: number, y: number) {
@@ -152,6 +159,40 @@
 			grid[x + 1][y + 1].state === "hidden"
 		)
 			revealCell(x + 1, y + 1);
+	}
+
+	function checkWin() {
+		if (bombs > 0) return;
+
+		console.log("hello");
+
+		for (let i = 0; i < grid.length; i++) {
+			const col = grid[i];
+			for (let j = 0; j < col.length; j++) {
+				const cell = col[j];
+				if (cell.state === "visible") {
+					console.log("hi");
+					return;
+				}
+			}
+		}
+
+		isGameOver = true;
+		console.log("win");
+	}
+
+	function gameOver() {
+		isGameOver = true;
+
+		grid.forEach((col) => {
+			col.forEach(async (cell) => {
+				if (cell.content === "bomb" && cell.state === "hidden") {
+					cell.state = "visible";
+				} else if (cell.state === "flagged" && cell.content !== "bomb") {
+					cell.state = "visible";
+				}
+			});
+		});
 	}
 
 	function getCellColor(cell: Cell): string {
@@ -248,20 +289,38 @@
 
 	<div class="p-4 flex flex-row gap-4">
 		<button
-			class="p-4 text-4xl {currentTool === 'flag'
-				? 'bg-crust'
-				: 'bg-mantle'} rounded-2xl"
+			class="p-4
+				text-4xl
+				{currentTool === 'flag' ? 'bg-crust' : 'bg-mantle'}
+				rounded-2xl
+				transition
+				duration-500"
 			on:click={() => (currentTool = "flag")}
 		>
-			🚩
+			<span
+				class="{currentTool === 'flag' ? '' : 'grayscale'}
+					transition
+					duration-500"
+			>
+				🚩
+			</span>
 		</button>
 		<button
-			class="p-4 text-4xl {currentTool === 'dig'
-				? 'bg-crust'
-				: 'bg-mantle'} rounded-2xl"
+			class="p-4
+				text-4xl
+				{currentTool === 'dig' ? 'bg-crust' : 'bg-mantle'}
+				rounded-2xl
+				transition
+				duration-500"
 			on:click={() => (currentTool = "dig")}
 		>
-			⛏️
+			<span
+				class="{currentTool === 'dig' ? '' : 'grayscale'}
+					transition
+					duration-500"
+			>
+				⛏️
+			</span>
 		</button>
 	</div>
 </div>
