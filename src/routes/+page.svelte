@@ -274,10 +274,16 @@
 								w-full
 								h-full
 								{(i + j) % 2 === 0 ? 'bg-surface0' : 'bg-surface1'}"
-								out:blur={{ amount: "6rem" }}
+								out:fly={{
+									x: Math.random() * 50 - 25,
+									y: Math.random() * 50 - 25,
+									duration: 800,
+								}}
 							>
 								{#if cell.state === "flagged"}
-									<div in:scale out:fly={{ y: 20 }}>🚩</div>
+									<div in:scale out:fly={{ y: 10, x: Math.random() * 10 - 5 }}>
+										🚩
+									</div>
 								{/if}
 							</div>
 						{/if}
