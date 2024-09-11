@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { scale, fly, blur } from "svelte/transition";
+	import { scale, fly } from "svelte/transition";
+	import Dialog from "$lib/Dialog.svelte";
 	import type { Cell } from "$lib/utils";
 
 	let grid: Cell[][] = Array(10).fill(
@@ -9,7 +10,10 @@
 	let isGameOver = false;
 	let currentTool: "flag" | "dig" = "flag";
 	let time = 0;
+	let timerInterval: number;
 	let bombs = 0;
+	let hasWon = false;
+	let finalDialogOpen = false;
 
 	function generateGrid(touchX: number, touchY: number) {
 		grid = [];
@@ -90,7 +94,7 @@
 
 			revealCell(x, y);
 
-			setInterval(() => time++, 1000);
+			timerInterval = setInterval(() => time++, 1000);
 		} else if (!isGameOver) {
 			if (currentTool === "flag") {
 				if (grid[x][y].state === "hidden") {
@@ -162,27 +166,29 @@
 	}
 
 	function checkWin() {
-		if (bombs > 0) return;
-
-		console.log("hello");
-
-		for (let i = 0; i < grid.length; i++) {
-			const col = grid[i];
-			for (let j = 0; j < col.length; j++) {
-				const cell = col[j];
-				if (cell.state === "visible") {
-					console.log("hi");
-					return;
+		let win = true;
+		grid.forEach((col) => {
+			col.forEach((cell) => {
+				if (cell.content !== "bomb" && cell.state === "hidden") {
+					win = false;
 				}
-			}
-		}
+			});
+		});
 
-		isGameOver = true;
-		console.log("win");
+		if (win) {
+			hasWon = true;
+			isGameOver = true;
+			clearInterval(timerInterval);
+
+			setTimeout(() => {
+				finalDialogOpen = true;
+			}, 500);
+		}
 	}
 
 	function gameOver() {
 		isGameOver = true;
+		clearInterval(timerInterval);
 
 		grid.forEach((col) => {
 			col.forEach(async (cell) => {
@@ -193,6 +199,10 @@
 				}
 			});
 		});
+
+		setTimeout(() => {
+			finalDialogOpen = true;
+		}, 2000);
 	}
 
 	function getCellColor(cell: Cell): string {
@@ -278,6 +288,7 @@
 									x: Math.random() * 50 - 25,
 									y: Math.random() * 50 - 25,
 									duration: 800,
+									delay: cell.content === "bomb" ? Math.random() * 2000 : 0,
 								}}
 							>
 								{#if cell.state === "flagged"}
@@ -329,4 +340,22 @@
 			</span>
 		</button>
 	</div>
+
+	<Dialog isOpen={finalDialogOpen}>
+		<div class="flex flex-col items-center gap-2">
+			{#if hasWon}
+				<div class="text-6xl">⏳</div>
+				<div class="text-3xl font-bold">{time}</div>
+			{:else}
+				<div class="text-6xl">💣</div>
+				<div class="text-3xl font-bold">Game Over !</div>
+			{/if}
+			<button
+				class="mt-2 p-4 text-3xl bg-crust rounded-2xl"
+				on:click={() => window.location.reload()}
+			>
+				<span class="grayscale"> 🏠 </span>
+			</button>
+		</div>
+	</Dialog>
 </div>
