@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { scale, fly } from "svelte/transition";
+	import { scale, fly, slide } from "svelte/transition";
 	import Dialog from "$lib/Dialog.svelte";
 	import type { Cell } from "$lib/utils";
 
@@ -236,6 +236,7 @@
 <div class="h-full flex flex-col justify-between items-center">
 	<div
 		class="w-full p-4 flex flex-row justify-center items-center gap-4 font-bold text-2xl bg-mantle"
+		transition:slide={{ duration: 500, delay: 500 }}
 	>
 		<div>
 			⏳{time}
@@ -245,7 +246,7 @@
 		</div>
 	</div>
 
-	<div class="flex flex-row">
+	<div class="flex flex-row" transition:scale={{ duration: 500, delay: 500 }}>
 		{#each grid as col, i}
 			<div class="flex flex-col">
 				{#each col as cell, j}
@@ -304,7 +305,10 @@
 		{/each}
 	</div>
 
-	<div class="p-4 flex flex-row gap-4">
+	<div
+		class="p-4 flex flex-row gap-4"
+		transition:slide={{ duration: 500, delay: 500 }}
+	>
 		<button
 			class="p-4
 				text-4xl
