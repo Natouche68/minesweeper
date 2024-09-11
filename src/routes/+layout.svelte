@@ -6,4 +6,6 @@
 	<title>Minesweeper</title>
 </svelte:head>
 
-<slot />
+<div class="h-dvh bg-base text-text">
+	<slot />
+</div>
