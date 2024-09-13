@@ -260,8 +260,8 @@
 				{#each col as cell, j}
 					<button
 						class="relative
-							w-5
-              h-5
+							w-[1.4rem]
+              h-[1.4rem]
 							aspect-square
               flex
               justify-center

@@ -25,9 +25,9 @@
 	}
 
 	function startHardGame() {
-		gridWidth = 16;
-		gridHeight = 32;
-		bombNumber = 80;
+		gridWidth = 14;
+		gridHeight = 28;
+		bombNumber = 75;
 		gridScale = 100;
 		gameStarted = true;
 	}
