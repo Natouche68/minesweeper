@@ -1,0 +1,25 @@
+{
+	"background_color": "#24273a",
+	"dir": "ltr",
+	"display": "fullscreen",
+	"name": "Minesweeper",
+	"orientation": "portrait",
+	"scope": "/",
+	"short_name": "Minesweeper",
+	"start_url": "/",
+	"theme_color": "#1e2030",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"type": "image/png",
+			"sizes": "256x256"
+		}
+	],
+	"display_override": [
+		"fullscreen",
+		"standalone",
+		"minimal-ui",
+		"window-controls-overlay"
+	],
+	"categories": ["entertainment", "games"]
+}
