@@ -3,22 +3,38 @@
 	import { fade } from "svelte/transition";
 
 	let gameStarted = false;
+	let gridWidth = 10;
+	let gridHeight = 20;
+	let bombNumber = 35;
+	let gridScale = 100;
 
 	function startEasyGame() {
+		gridWidth = 6;
+		gridHeight = 12;
+		bombNumber = 10;
+		gridScale = 150;
 		gameStarted = true;
 	}
 
 	function startMediumGame() {
+		gridWidth = 10;
+		gridHeight = 20;
+		bombNumber = 35;
+		gridScale = 150;
 		gameStarted = true;
 	}
 
 	function startHardGame() {
+		gridWidth = 16;
+		gridHeight = 32;
+		bombNumber = 80;
+		gridScale = 100;
 		gameStarted = true;
 	}
 </script>
 
 {#if gameStarted}
-	<Game />
+	<Game {gridWidth} {gridHeight} {bombNumber} {gridScale} />
 {:else}
 	<div
 		class="h-dvh flex flex-col justify-around items-center"

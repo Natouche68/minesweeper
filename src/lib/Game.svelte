@@ -3,8 +3,13 @@
 	import Dialog from "$lib/Dialog.svelte";
 	import type { Cell } from "$lib/utils";
 
-	let grid: Cell[][] = Array(10).fill(
-		Array(20).fill({ content: 0, state: "hidden" })
+	export let gridWidth: number;
+	export let gridHeight: number;
+	export let bombNumber: number;
+	export let gridScale: number;
+
+	let grid: Cell[][] = Array(gridWidth).fill(
+		Array(gridHeight).fill({ content: 0, state: "hidden" })
 	);
 	let gameStarted = false;
 	let isGameOver = false;
@@ -19,16 +24,16 @@
 		grid = [];
 		bombs = 0;
 
-		for (let i = 0; i < 10; i++) {
+		for (let i = 0; i < gridWidth; i++) {
 			grid.push([]);
-			for (let j = 0; j < 20; j++) {
+			for (let j = 0; j < gridHeight; j++) {
 				grid[i].push({ content: 0, state: "hidden" });
 			}
 		}
 
-		while (bombs < 35) {
-			const x = Math.floor(Math.random() * 10);
-			const y = Math.floor(Math.random() * 20);
+		while (bombs < bombNumber) {
+			const x = Math.floor(Math.random() * gridWidth);
+			const y = Math.floor(Math.random() * gridHeight);
 
 			if (grid[x][y].content !== "bomb" && !cellNearby(x, y, touchX, touchY)) {
 				grid[x][y].content = "bomb";
@@ -246,27 +251,21 @@
 		</div>
 	</div>
 
-	<div class="flex flex-row" transition:scale={{ duration: 500, delay: 500 }}>
+	<div
+		class="flex flex-row scale-{gridScale}"
+		transition:scale={{ duration: 500, delay: 500 }}
+	>
 		{#each grid as col, i}
 			<div class="flex flex-col">
 				{#each col as cell, j}
-					{@const bgColor =
-						cell.state === "visible"
-							? (i + j) % 2 === 0
-								? "bg-mantle"
-								: "bg-crust"
-							: (i + j) % 2 === 0
-								? "bg-surface0"
-								: "bg-surface1"}
-
 					<button
 						class="relative
-							w-8
-              h-8
+							w-[1.4rem]
+              h-[1.4rem]
+							aspect-square
               flex
               justify-center
               items-center
-              text-xl
               font-bold
               {(i + j) % 2 === 0 ? 'bg-mantle' : 'bg-crust'}
               {getCellColor(cell)}
