@@ -1,0 +1,12 @@
+[
+	{
+		"relation": ["delegate_permission/common.handle_all_urls"],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "com.natouche68.minesweeper",
+			"sha256_cert_fingerprints": [
+				"99:BA:61:C9:E8:E2:31:F1:85:15:51:74:18:00:46:09:F7:6F:9C:04:C7:3B:AB:7C:93:14:BF:68:C2:D0:21:13"
+			]
+		}
+	}
+]
