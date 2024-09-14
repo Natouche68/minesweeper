@@ -281,8 +281,9 @@
 		<div>
 			⏳{time}
 		</div>
-		<div>
-			🚩{bombs}
+		<div class="flex flex-row gap-1">
+			<img src="/flag.png" alt="🚩" class="w-8 h-8" />
+			{bombs}
 		</div>
 	</div>
 
@@ -313,7 +314,11 @@
 							duration-500"
 						on:click={() => handleClick(i, j)}
 					>
-						{cell.content === "bomb" ? "💣" : cell.content}
+						{#if cell.content === "bomb"}
+							<img src="/bomb.png" alt="💣" class="h-5/6 w-5/6" />
+						{:else}
+							{cell.content}
+						{/if}
 
 						{#if cell.state !== "visible"}
 							<div
@@ -337,7 +342,7 @@
 										in:scale
 										out:fly={{ y: 10, x: Math.random() * 10 - 5 }}
 									>
-										🚩
+										<img src="/flag.png" alt="🚩" class="w-full h-full" />
 									</div>
 								{/if}
 							</div>
@@ -354,7 +359,6 @@
 	>
 		<button
 			class="p-4
-				text-4xl
 				{currentTool === 'flag' ? 'bg-crust' : 'bg-mantle'}
 				rounded-2xl
 				transition
@@ -366,7 +370,7 @@
 					transition
 					duration-500"
 			>
-				🚩
+				<img src="/flag.png" alt="🚩" class="w-12 h-12" />
 			</span>
 		</button>
 		<button
@@ -394,7 +398,9 @@
 				<div class="text-6xl">⏳</div>
 				<div class="text-3xl font-bold">{time}</div>
 			{:else}
-				<div class="text-6xl">💣</div>
+				<div class="text-6xl">
+					<img src="/bomb.png" alt="💣" class="h-28 w-28" />
+				</div>
 				<div class="text-3xl font-bold">Game Over !</div>
 			{/if}
 			<button
