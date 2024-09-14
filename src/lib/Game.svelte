@@ -278,8 +278,9 @@
 		class="w-full p-4 flex flex-row justify-center items-center gap-4 font-bold text-2xl bg-mantle"
 		transition:slide={{ duration: 500, delay: 500 }}
 	>
-		<div>
-			⏳{time}
+		<div class="flex flex-row gap-1">
+			<img src="/timer.png" alt="⏳" class="h-8 w-8" />
+			{time}
 		</div>
 		<div class="flex flex-row gap-1">
 			<img src="/flag.png" alt="🚩" class="w-8 h-8" />
@@ -375,7 +376,6 @@
 		</button>
 		<button
 			class="p-4
-				text-4xl
 				{currentTool === 'dig' ? 'bg-crust' : 'bg-mantle'}
 				rounded-2xl
 				transition
@@ -387,7 +387,7 @@
 					transition
 					duration-500"
 			>
-				⛏️
+				<img src="/pickaxe.png" alt="⛏️" class="w-12 h-12" />
 			</span>
 		</button>
 	</div>
@@ -395,22 +395,20 @@
 	<Dialog isOpen={finalDialogOpen}>
 		<div class="flex flex-col items-center gap-2">
 			{#if hasWon}
-				<div class="text-6xl">⏳</div>
+				<img src="/timer.png" alt="⏳" class="h-28 w-28" />
 				<div class="text-3xl font-bold">{time}</div>
 			{:else}
-				<div class="text-6xl">
-					<img src="/bomb.png" alt="💣" class="h-28 w-28" />
-				</div>
+				<img src="/bomb.png" alt="💣" class="h-28 w-28" />
 				<div class="text-3xl font-bold">Game Over !</div>
 			{/if}
 			<button
-				class="mt-2 p-4 text-3xl bg-crust rounded-2xl"
+				class="mt-2 p-4 bg-crust rounded-2xl"
 				on:click={() => {
 					finalDialogOpen = false;
 					dispatch("newGame");
 				}}
 			>
-				<span class="grayscale"> 🏠 </span>
+				<img src="/home.png" alt="🏠" class="w-14 h-14" />
 			</button>
 		</div>
 
