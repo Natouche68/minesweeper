@@ -252,7 +252,8 @@
 	</div>
 
 	<div
-		class="flex flex-row scale-{gridScale}"
+		class="flex flex-row"
+		style="scale: {gridScale}%;"
 		transition:scale={{ duration: 500, delay: 500 }}
 	>
 		{#each grid as col, i}

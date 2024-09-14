@@ -12,7 +12,7 @@
 		gridWidth = 6;
 		gridHeight = 12;
 		bombNumber = 10;
-		gridScale = 150;
+		gridScale = 180;
 		gameStarted = true;
 	}
 
