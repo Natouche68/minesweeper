@@ -112,7 +112,10 @@
 			} else {
 				if (grid[x][y].state === "hidden") {
 					revealCell(x, y);
-				} else if (grid[x][y].state === "visible") {
+				} else if (
+					grid[x][y].state === "visible" &&
+					getNearbyFlags(x, y) === grid[x][y].content
+				) {
 					revealNearbyCells(x, y);
 				}
 			}
@@ -236,6 +239,34 @@
 				return "text-text";
 		}
 	}
+
+	function getNearbyFlags(x: number, y: number): number {
+		let nearbyFlags = 0;
+
+		if (x > 0 && y > 0 && grid[x - 1][y - 1].state === "flagged") nearbyFlags++;
+		if (x > 0 && grid[x - 1][y].state === "flagged") nearbyFlags++;
+		if (
+			x > 0 &&
+			y < grid[0].length - 1 &&
+			grid[x - 1][y + 1].state === "flagged"
+		)
+			nearbyFlags++;
+		if (y > 0 && grid[x][y - 1].state === "flagged") nearbyFlags++;
+		if (y < grid[0].length - 1 && grid[x][y + 1].state === "flagged")
+			nearbyFlags++;
+		if (x < grid.length - 1 && y > 0 && grid[x + 1][y - 1].state === "flagged")
+			nearbyFlags++;
+		if (x < grid.length - 1 && grid[x + 1][y].state === "flagged")
+			nearbyFlags++;
+		if (
+			x < grid.length - 1 &&
+			y < grid[0].length - 1 &&
+			grid[x + 1][y + 1].state === "flagged"
+		)
+			nearbyFlags++;
+
+		return nearbyFlags;
+	}
 </script>
 
 <div class="h-full flex flex-col justify-between items-center">
@@ -267,11 +298,14 @@
               flex
               justify-center
               items-center
-              font-bold
+              {getNearbyFlags(i, j) === cell.content
+							? 'font-medium'
+							: 'font-bold'}
               {(i + j) % 2 === 0 ? 'bg-mantle' : 'bg-crust'}
               {getCellColor(cell)}
               border-none
-              outline-none"
+              outline-none
+							transition-all"
 						on:click={() => handleClick(i, j)}
 					>
 						{cell.content === "bomb" ? "💣" : cell.content}
