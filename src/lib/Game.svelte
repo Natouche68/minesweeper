@@ -327,7 +327,11 @@
 								}}
 							>
 								{#if cell.state === "flagged"}
-									<div in:scale out:fly={{ y: 10, x: Math.random() * 10 - 5 }}>
+									<div
+										class="text-text"
+										in:scale
+										out:fly={{ y: 10, x: Math.random() * 10 - 5 }}
+									>
 										🚩
 									</div>
 								{/if}

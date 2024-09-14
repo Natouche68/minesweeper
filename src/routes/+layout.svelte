@@ -7,6 +7,6 @@
 	<link rel="manifest" href="/manifest.json" />
 </svelte:head>
 
-<div class="h-dvh bg-base text-text">
+<div class="h-dvh bg-base text-text overflow-hidden">
 	<slot />
 </div>
