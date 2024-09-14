@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { scale, fly, slide } from "svelte/transition";
 	import Dialog from "$lib/Dialog.svelte";
+	import { Confetti } from "svelte-confetti";
 	import type { Cell } from "$lib/utils";
 
 	export let gridWidth: number;
@@ -305,7 +306,8 @@
               {getCellColor(cell)}
               border-none
               outline-none
-							transition-all"
+							transition-all
+							duration-500"
 						on:click={() => handleClick(i, j)}
 					>
 						{cell.content === "bomb" ? "💣" : cell.content}
@@ -399,5 +401,29 @@
 				<span class="grayscale"> 🏠 </span>
 			</button>
 		</div>
+
+		{#if finalDialogOpen && hasWon}
+			<div class="fixed -top-[50vh] left-1/2 -translate-x-1/2">
+				<Confetti
+					delay={[500, 1500]}
+					x={[-2, 2]}
+					y={[0, -1]}
+					amount={100}
+					xSpread={0}
+					size={8}
+					infinite
+				/>
+			</div>
+			<div class="fixed -bottom-[50vh] left-1/2 -translate-x-1/2">
+				<Confetti
+					delay={[500, 1500]}
+					x={[-1, 1]}
+					y={[1, 2]}
+					amount={150}
+					cone
+					infinite
+				/>
+			</div>
+		{/if}
 	</Dialog>
 </div>

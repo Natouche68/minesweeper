@@ -23,6 +23,7 @@
     shadow-lg
     backdrop:backdrop-blur-sm
 		{isOpen ? 'scale-100' : 'scale-0'}
+		overflow-visible
 		transition
 		duration-500"
 >
