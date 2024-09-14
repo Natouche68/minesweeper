@@ -2,6 +2,7 @@
 	import { scale, fly, slide } from "svelte/transition";
 	import Dialog from "$lib/Dialog.svelte";
 	import { Confetti } from "svelte-confetti";
+	import { createEventDispatcher } from "svelte";
 	import type { Cell } from "$lib/utils";
 
 	export let gridWidth: number;
@@ -20,6 +21,8 @@
 	let bombs = 0;
 	let hasWon = false;
 	let finalDialogOpen = false;
+
+	const dispatch = createEventDispatcher();
 
 	function generateGrid(touchX: number, touchY: number) {
 		grid = [];
@@ -396,7 +399,10 @@
 			{/if}
 			<button
 				class="mt-2 p-4 text-3xl bg-crust rounded-2xl"
-				on:click={() => window.location.reload()}
+				on:click={() => {
+					finalDialogOpen = false;
+					dispatch("newGame");
+				}}
 			>
 				<span class="grayscale"> 🏠 </span>
 			</button>

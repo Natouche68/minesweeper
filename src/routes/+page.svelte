@@ -34,11 +34,18 @@
 </script>
 
 {#if gameStarted}
-	<Game {gridWidth} {gridHeight} {bombNumber} {gridScale} />
+	<Game
+		{gridWidth}
+		{gridHeight}
+		{bombNumber}
+		{gridScale}
+		on:newGame={() => (gameStarted = false)}
+	/>
 {:else}
 	<div
 		class="h-dvh flex flex-col justify-around items-center"
-		transition:fade={{ duration: 500 }}
+		in:fade={{ duration: 500, delay: 1000 }}
+		out:fade={{ duration: 500 }}
 	>
 		<div
 			class="flex flex-col items-center gap-4 font-bold text-5xl text-center text-blue tracking-wide uppercase"
