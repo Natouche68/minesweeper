@@ -73,6 +73,12 @@
 				Hard
 			</button>
 		</div>
-		<div class="italic text-overlay1">Made with ❤ by Natouche68</div>
+		<a href="https://github.com/Natouche68">
+			<img
+				src="/copyright.png"
+				alt="Made with love by Natouche68"
+				class="w-44"
+			/>
+		</a>
 	</div>
 {/if}
