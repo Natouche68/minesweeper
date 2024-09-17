@@ -362,6 +362,7 @@
 			class="p-4
 				{currentTool === 'flag' ? 'bg-crust' : 'bg-mantle'}
 				rounded-2xl
+				{currentTool === 'flag' ? 'scale-100' : 'scale-75'}
 				transition
 				duration-500"
 			on:click={() => (currentTool = "flag")}
@@ -378,6 +379,7 @@
 			class="p-4
 				{currentTool === 'dig' ? 'bg-crust' : 'bg-mantle'}
 				rounded-2xl
+				{currentTool === 'dig' ? 'scale-100' : 'scale-75'}
 				transition
 				duration-500"
 			on:click={() => (currentTool = "dig")}
