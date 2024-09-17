@@ -77,7 +77,7 @@
 			<img
 				src="/copyright.png"
 				alt="Made with love by Natouche68"
-				class="w-44"
+				class="w-36"
 			/>
 		</a>
 	</div>
