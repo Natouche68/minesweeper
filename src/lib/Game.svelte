@@ -42,45 +42,78 @@
 			if (grid[x][y].content !== "bomb" && !cellNearby(x, y, touchX, touchY)) {
 				grid[x][y].content = "bomb";
 				bombs++;
+
+				if (x > 0 && y > 0 && grid[x - 1][y - 1].content !== "bomb")
+					grid[x - 1][y - 1].content =
+						(grid[x - 1][y - 1].content as number) + 1;
+				if (x > 0 && grid[x - 1][y].content !== "bomb")
+					grid[x - 1][y].content = (grid[x - 1][y].content as number) + 1;
+				if (
+					x > 0 &&
+					y < grid[0].length - 1 &&
+					grid[x - 1][y + 1].content !== "bomb"
+				)
+					grid[x - 1][y + 1].content =
+						(grid[x - 1][y + 1].content as number) + 1;
+				if (y > 0 && grid[x][y - 1].content !== "bomb")
+					grid[x][y - 1].content = (grid[x][y - 1].content as number) + 1;
+				if (y < grid[0].length - 1 && grid[x][y + 1].content !== "bomb")
+					grid[x][y + 1].content = (grid[x][y + 1].content as number) + 1;
+				if (
+					x < grid.length - 1 &&
+					y > 0 &&
+					grid[x + 1][y - 1].content !== "bomb"
+				)
+					grid[x + 1][y - 1].content =
+						(grid[x + 1][y - 1].content as number) + 1;
+				if (x < grid.length - 1 && grid[x + 1][y].content !== "bomb")
+					grid[x + 1][y].content = (grid[x + 1][y].content as number) + 1;
+				if (
+					x < grid.length - 1 &&
+					y < grid[0].length - 1 &&
+					grid[x + 1][y + 1].content !== "bomb"
+				)
+					grid[x + 1][y + 1].content =
+						(grid[x + 1][y + 1].content as number) + 1;
 			}
 		}
 
-		grid.forEach((col, i) => {
-			col.forEach((cell, j) => {
-				if (cell.content !== "bomb") {
-					let nearbyBombs = 0;
+		// grid.forEach((col, i) => {
+		// 	col.forEach((cell, j) => {
+		// 		if (cell.content !== "bomb") {
+		// 			let nearbyBombs = 0;
 
-					if (i > 0 && j > 0 && grid[i - 1][j - 1].content === "bomb")
-						nearbyBombs++;
-					if (i > 0 && grid[i - 1][j].content === "bomb") nearbyBombs++;
-					if (
-						i > 0 &&
-						j < grid[0].length - 1 &&
-						grid[i - 1][j + 1].content === "bomb"
-					)
-						nearbyBombs++;
-					if (j > 0 && grid[i][j - 1].content === "bomb") nearbyBombs++;
-					if (j < grid[0].length - 1 && grid[i][j + 1].content === "bomb")
-						nearbyBombs++;
-					if (
-						i < grid.length - 1 &&
-						j > 0 &&
-						grid[i + 1][j - 1].content === "bomb"
-					)
-						nearbyBombs++;
-					if (i < grid.length - 1 && grid[i + 1][j].content === "bomb")
-						nearbyBombs++;
-					if (
-						i < grid.length - 1 &&
-						j < grid[0].length - 1 &&
-						grid[i + 1][j + 1].content === "bomb"
-					)
-						nearbyBombs++;
+		// 			if (i > 0 && j > 0 && grid[i - 1][j - 1].content === "bomb")
+		// 				nearbyBombs++;
+		// 			if (i > 0 && grid[i - 1][j].content === "bomb") nearbyBombs++;
+		// 			if (
+		// 				i > 0 &&
+		// 				j < grid[0].length - 1 &&
+		// 				grid[i - 1][j + 1].content === "bomb"
+		// 			)
+		// 				nearbyBombs++;
+		// 			if (j > 0 && grid[i][j - 1].content === "bomb") nearbyBombs++;
+		// 			if (j < grid[0].length - 1 && grid[i][j + 1].content === "bomb")
+		// 				nearbyBombs++;
+		// 			if (
+		// 				i < grid.length - 1 &&
+		// 				j > 0 &&
+		// 				grid[i + 1][j - 1].content === "bomb"
+		// 			)
+		// 				nearbyBombs++;
+		// 			if (i < grid.length - 1 && grid[i + 1][j].content === "bomb")
+		// 				nearbyBombs++;
+		// 			if (
+		// 				i < grid.length - 1 &&
+		// 				j < grid[0].length - 1 &&
+		// 				grid[i + 1][j + 1].content === "bomb"
+		// 			)
+		// 				nearbyBombs++;
 
-					cell.content = nearbyBombs;
-				}
-			});
-		});
+		// 			cell.content = nearbyBombs;
+		// 		}
+		// 	});
+		// });
 	}
 
 	function cellNearby(x1: number, y1: number, x2: number, y2: number): boolean {
@@ -105,7 +138,7 @@
 
 			timerInterval = setInterval(() => time++, 1000);
 		} else if (!isGameOver) {
-			if (currentTool === "flag") {
+			if (currentTool === "flag" && bombs > 0) {
 				if (grid[x][y].state === "hidden") {
 					grid[x][y].state = "flagged";
 					bombs--;
