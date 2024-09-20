@@ -77,43 +77,6 @@
 						(grid[x + 1][y + 1].content as number) + 1;
 			}
 		}
-
-		// grid.forEach((col, i) => {
-		// 	col.forEach((cell, j) => {
-		// 		if (cell.content !== "bomb") {
-		// 			let nearbyBombs = 0;
-
-		// 			if (i > 0 && j > 0 && grid[i - 1][j - 1].content === "bomb")
-		// 				nearbyBombs++;
-		// 			if (i > 0 && grid[i - 1][j].content === "bomb") nearbyBombs++;
-		// 			if (
-		// 				i > 0 &&
-		// 				j < grid[0].length - 1 &&
-		// 				grid[i - 1][j + 1].content === "bomb"
-		// 			)
-		// 				nearbyBombs++;
-		// 			if (j > 0 && grid[i][j - 1].content === "bomb") nearbyBombs++;
-		// 			if (j < grid[0].length - 1 && grid[i][j + 1].content === "bomb")
-		// 				nearbyBombs++;
-		// 			if (
-		// 				i < grid.length - 1 &&
-		// 				j > 0 &&
-		// 				grid[i + 1][j - 1].content === "bomb"
-		// 			)
-		// 				nearbyBombs++;
-		// 			if (i < grid.length - 1 && grid[i + 1][j].content === "bomb")
-		// 				nearbyBombs++;
-		// 			if (
-		// 				i < grid.length - 1 &&
-		// 				j < grid[0].length - 1 &&
-		// 				grid[i + 1][j + 1].content === "bomb"
-		// 			)
-		// 				nearbyBombs++;
-
-		// 			cell.content = nearbyBombs;
-		// 		}
-		// 	});
-		// });
 	}
 
 	function cellNearby(x1: number, y1: number, x2: number, y2: number): boolean {
