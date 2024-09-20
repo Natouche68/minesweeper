@@ -131,11 +131,11 @@
 			gameOver();
 		}
 
+		grid = grid;
+
 		if (grid[x][y].content === 0) {
 			revealNearbyCells(x, y);
 		}
-
-		grid = grid;
 
 		if (gameStarted) {
 			checkWin();
