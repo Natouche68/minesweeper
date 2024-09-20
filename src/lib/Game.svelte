@@ -95,10 +95,10 @@
 	function handleClick(x: number, y: number) {
 		if (!gameStarted) {
 			generateGrid(x, y);
-			gameStarted = true;
 
 			revealCell(x, y);
 
+			gameStarted = true;
 			timerInterval = setInterval(() => time++, 1000);
 		} else if (!isGameOver) {
 			if (currentTool === "flag" && bombs > 0) {
@@ -132,20 +132,14 @@
 		}
 
 		if (grid[x][y].content === 0) {
-			if (x > 0 && y > 0) revealCell(x - 1, y - 1);
-			if (x > 0) revealCell(x - 1, y);
-			if (x > 0 && y < grid[0].length - 1) revealCell(x - 1, y + 1);
-			if (y > 0) revealCell(x, y - 1);
-			if (y < grid[0].length - 1) revealCell(x, y + 1);
-			if (x < grid.length - 1 && y > 0) revealCell(x + 1, y - 1);
-			if (x < grid.length - 1) revealCell(x + 1, y);
-			if (x < grid.length - 1 && y < grid[0].length - 1)
-				revealCell(x + 1, y + 1);
+			revealNearbyCells(x, y);
 		}
 
 		grid = grid;
 
-		checkWin();
+		if (gameStarted) {
+			checkWin();
+		}
 	}
 
 	function revealNearbyCells(x: number, y: number) {
